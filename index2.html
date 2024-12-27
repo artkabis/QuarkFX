@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuarkFX Demo</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .demo-section {
+            padding: 20px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .boxes-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background: #3498db;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+        }
+
+        .stagger-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .stagger-box {
+            background: #e74c3c;
+            aspect-ratio: 1;
+            border-radius: 8px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background: #2ecc71;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background: #27ae60;
+        }
+
+        .path-follow {
+            width: 50px;
+            height: 50px;
+            background: #9b59b6;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .morph-demo {
+            width: 100px;
+            height: 100px;
+            background: #f1c40f;
+            margin: 20px;
+        }
+
+        .parallel-box {
+            width: 60px;
+            height: 60px;
+            background: #1abc9c;
+            position: relative;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-section">
+        <h2>Basic Animations</h2>
+        <div class="boxes-container">
+            <div id="basic1" class="box">Click me</div>
+            <div id="basic2" class="box">Hover me</div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Stagger Animation</h2>
+        <div class="stagger-container">
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+            <div class="stagger-box"></div>
+        </div>
+        <button class="button" id="stagger-trigger">Trigger Stagger</button>
+    </div>
+
+    <div class="demo-section">
+        <h2>Complex Sequence</h2>
+        <div class="boxes-container">
+            <div id="sequence1" class="box">1</div>
+            <div id="sequence2" class="box">2</div>
+            <div id="sequence3" class="box">3</div>
+        </div>
+        <button class="button" id="sequence-trigger">Start Sequence</button>
+    </div>
+
+    <div class="demo-section">
+        <h2>Mixed Properties</h2>
+        <div id="mixed" class="box" style="transition: none;">
+            Properties
+        </div>
+        <button class="button" id="mixed-trigger">Animate All</button>
+    </div>
+
+    <script type="module">
+        import quark from './quarkfx.min.js';
+    
+        // DOM loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Basic Animations
+            const basic1 = document.getElementById('basic1');
+            if (basic1) {
+                basic1.addEventListener('click', () => {
+                    quark.fromTo('#basic1', 1000,
+                        { x: 0, rotation: 0 },
+                        { x: 200, rotation: 360 },
+                        { easing: 'elastic' }
+                    );
+                });
+            }
+    
+            const basic2 = document.getElementById('basic2');
+            if (basic2) {
+                basic2.addEventListener('mouseenter', () => {
+                    quark.to('#basic2', 500, 
+                        { scale: 1.2, backgroundColor: '#2ecc71' },
+                        { easing: 'easeOutQuad' }
+                    );
+                });
+    
+                basic2.addEventListener('mouseleave', () => {
+                    quark.to('#basic2', 500, 
+                        { scale: 1, backgroundColor: '#3498db' },
+                        { easing: 'easeOutQuad' }
+                    );
+                });
+            }
+    
+            // Stagger Animation
+            const staggerTrigger = document.getElementById('stagger-trigger');
+            if (staggerTrigger) {
+                staggerTrigger.addEventListener('click', () => {
+                    quark.stagger('.stagger-box', 800, 
+                        { 
+                            y: -50,
+                            rotation: 180,
+                            backgroundColor: '#9b59b6',
+                            scale: 1.2
+                        },
+                        50,
+                        { easing: 'easeOutBack' }
+                    ).then(() => {
+                        quark.stagger('.stagger-box', 800, 
+                            { 
+                                y: 0,
+                                rotation: 0,
+                                backgroundColor: '#e74c3c',
+                                scale: 1
+                            },
+                            50,
+                            { easing: 'easeOutQuad' }
+                        );
+                    });
+                });
+            }
+    
+    
+            const sequenceTrigger = document.getElementById('sequence-trigger');
+            if (sequenceTrigger) {
+                sequenceTrigger.addEventListener('click', async () => {
+                    await quark.sequence([
+                        ['#sequence1', 800, { x: 200, backgroundColor: '#2ecc71' }],
+                        ['#sequence2', 800, { y: -100, backgroundColor: '#f1c40f' }],
+                        ['#sequence3', 800, { scale: 1.5, backgroundColor: '#9b59b6' }]
+                    ]);
+    
+                    await quark.parallel([
+                        ['#sequence1', 800, { x: 0, backgroundColor: '#3498db' }],
+                        ['#sequence2', 800, { y: 0, backgroundColor: '#3498db' }],
+                        ['#sequence3', 800, { scale: 1, backgroundColor: '#3498db' }]
+                    ]);
+                });
+            }
+    
+            const loopToggle = document.getElementById('loop-toggle');
+            let loopAnimations = [];
+            if (loopToggle) {
+                loopToggle.addEventListener('click', () => {
+                    if (loopAnimations.length) {
+                        loopAnimations.forEach(anim => anim.finish());
+                        loopAnimations = [];
+                    } else {
+                        loopAnimations = [
+                            quark.loop('#loop1', 1000, 
+                                { scale: 1.2 },
+                                { easing: 'easeInOutQuad', direction: 'alternate' }
+                            ),
+                            quark.loop('#loop2', 2000, 
+                                { rotation: 360 },
+                                { easing: 'linear' }
+                            )
+                        ];
+                    }
+                });
+            }
+    
+            const parallelTrigger = document.getElementById('parallel-trigger');
+            if (parallelTrigger) {
+                parallelTrigger.addEventListener('click', () => {
+                    quark.parallel([
+                        ['#parallel1', 1000, { x: 200, y: 100 }],
+                        ['#parallel2', 1000, { x: 100, y: -100 }],
+                        ['#parallel3', 1000, { x: -100, y: 100 }]
+                    ]).then(() => {
+                        quark.parallel([
+                            ['#parallel1', 1000, { x: 0, y: 0 }],
+                            ['#parallel2', 1000, { x: 0, y: 0 }],
+                            ['#parallel3', 1000, { x: 0, y: 0 }]
+                        ]);
+                    });
+                });
+            }
+    
+            const mixedTrigger = document.getElementById('mixed-trigger');
+            if (mixedTrigger) {
+                mixedTrigger.addEventListener('click', () => {
+                    quark.fromTo('#mixed', 1500,
+                        {
+                            x: 0,
+                            y: 0,
+                            scale: 1,
+                            rotation: 0,
+                            backgroundColor: '#3498db',
+                            borderRadius: '8px',
+                            boxShadow: '0 0 0 rgba(0,0,0,0)'
+                        },
+                        {
+                            x: 150,
+                            y: -50,
+                            scale: 1.3,
+                            rotation: 720,
+                            backgroundColor: '#e67e22',
+                            borderRadius: '50%',
+                            boxShadow: '0 20px 30px rgba(0,0,0,0.2)'
+                        },
+                        {
+                            easing: 'easeOutBack'
+                        }
+                    ).then(() => {
+                        quark.to('#mixed', 1000, {
+                            x: 0,
+                            y: 0,
+                            scale: 1,
+                            rotation: 0,
+                            backgroundColor: '#3498db',
+                            borderRadius: '8px',
+                            boxShadow: '0 0 0 rgba(0,0,0,0)'
+                        });
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
