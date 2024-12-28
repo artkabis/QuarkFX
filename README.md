@@ -4,7 +4,7 @@ Simple animation library for fun ;)
 Modern vanilla JS animation library focusing on chain methods and transforms. Built with Web Animation API, zero dependencies.
 
 ## Features
-- 🚀 Lightweight (~4kb minified)
+- 🚀 Lightweight (~5kb minified)
 - 🔗 Chainable methods
 - 🎯 Simple API
 - 🎨 CSS transforms & easings support
@@ -282,7 +282,7 @@ quark.stagger('.grid-items', 1000,
 - Edge 79+
 
 ## Documentation
-For detailed documentation and advanced examples, visit our [GitHub repository](https://github.com/yourusername/quarkfx).
+For detailed documentation and advanced examples, visit our [GitHub repository](https://github.com/artkabis/quarkfx).
 
 ## License
 MIT
