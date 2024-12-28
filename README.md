@@ -1,15 +1,74 @@
-# QuarkFX v2 Beta
+# QuarkFX v2
 Simple animation library for fun ;)
 
-A modern, lightweight animation library built on the Web Animation API. Zero dependencies, chainable methods, and powerful features in just ~4kb.
+Modern vanilla JS animation library focusing on chain methods and transforms. Built with Web Animation API, zero dependencies.
 
-[![npm version](https://badge.fury.io/js/quarkfx.svg)](https://www.npmjs.com/package/quarkfx)
+## Features
+- 🚀 Lightweight (~4kb minified)
+- 🔗 Chainable methods
+- 🎯 Simple API
+- 🎨 CSS transforms & easings support
+- ⚡ Built on Web Animation API
+- 0️⃣ Zero dependencies
 
 ## Installation
 
+[![npm version](https://badge.fury.io/js/quarkfx.svg)](https://www.npmjs.com/package/quarkfx)
+
+### NPM (Latest beta)
 ```bash
-# Install beta version
-npm install quarkfx@beta
+# Install beta version (recommended for v2)
+npm install quarkfx@2.0.0-beta.1
+
+# Or install latest stable (v1)
+npm install quarkfx
+```
+
+### Import Methods
+
+#### NPM Module Import
+```javascript
+// ESM import (recommended)
+import quark from 'quarkfx';
+
+// Direct ESM import
+import quark from 'quarkfx/dist/v2/quarkfx.esm.js';
+
+// CommonJS
+const quark = require('quarkfx');
+```
+
+#### CDN Import
+Via unpkg:
+```javascript
+// Latest beta (v2)
+import quark from 'https://unpkg.com/quarkfx@2.0.0-beta.1/dist/v2/quarkfx.esm.js';
+
+// Latest stable (v1)
+import quark from 'https://unpkg.com/quarkfx@1.0.0/dist/quarkfx.esm.js';
+```
+
+Via jsDelivr:
+```javascript
+// Latest beta (v2)
+import quark from 'https://cdn.jsdelivr.net/npm/quarkfx@2.0.0-beta.1/dist/v2/quarkfx.esm.js';
+
+// Latest stable (v1)
+import quark from 'https://cdn.jsdelivr.net/npm/quarkfx@1.0.0/dist/quarkfx.esm.js';
+```
+
+#### HTML Module Import
+```html
+<script type="module">
+  // Latest beta (v2)
+  import quark from 'https://unpkg.com/quarkfx@2.0.0-beta.1/dist/v2/quarkfx.esm.js';
+  
+  // Example usage
+  quark.fromTo('#target', 1000, 
+    { x: 0, rotation: 0 }, 
+    { x: 100, rotation: 360 }
+  );
+</script>
 ```
 
 ## Quick Start
@@ -32,9 +91,9 @@ quark.fromTo('#element', 2000,
 );
 ```
 
-## Core Features
+## API Reference
 
-### Animation Methods
+### Core Methods
 
 #### fromTo(selector, duration, fromProps, toProps, options)
 Animate from initial to final state
@@ -50,7 +109,7 @@ quark.fromTo('#target', 1000,
 ```
 
 #### to(selector, duration, toProps, options)
-Animate to final state
+Animate to final state from current position
 ```javascript
 quark.to('#target', 1000, 
   { x: 200, y: 100 },
@@ -58,36 +117,46 @@ quark.to('#target', 1000,
 );
 ```
 
-### Control Methods
+### Animation Control Methods
 
 #### play(selector)
+Resume paused animation
 ```javascript
 quark.play('#target');
 ```
 
 #### pause(selector)
+Pause current animation
 ```javascript
 quark.pause('#target');
 ```
 
 #### finish(selector)
+Complete current animation immediately
 ```javascript
 quark.finish('#target');
 ```
 
 #### reverse()
+Reverse the previous animation
 ```javascript
-quark.reverse('#target');
+quark.fromTo('#target', 1000, 
+  { x: 0 }, 
+  { x: 100 }
+).reverse();
 ```
 
-### Advanced Animations
+### Complex Animations
 
 #### stagger(selector, duration, props, staggerTime, options)
 Create cascading animations
 ```javascript
 quark.stagger('.items', 1000, 
-  { y: 100, rotation: 360 }, 
-  50,  // delay between elements
+  { 
+    y: 100, 
+    rotation: 360 
+  }, 
+  50, // delay between each
   { easing: 'easeOutBack' }
 );
 ```
@@ -116,7 +185,10 @@ Create infinite animations
 ```javascript
 quark.loop('#target', 1000, 
   { rotation: 360 },
-  { iterations: Infinity }
+  { 
+    easing: 'linear',
+    iterations: Infinity 
+  }
 );
 ```
 
@@ -132,9 +204,12 @@ quark.loop('#target', 1000,
   scale: number,      // scale transform
 
   // CSS properties
+  opacity: number,
   backgroundColor: string,
   borderRadius: string,
   boxShadow: string,
+  width: string,
+  height: string,
   // ... any valid CSS property
 }
 ```
@@ -196,16 +271,21 @@ quark.stagger('.grid-items', 1000,
 );
 ```
 
+## Live Demos
+- [QuarkFX v2 Demo](https://codepen.io/artkabis/pen/raBzwXd)
+- [QuarkFX v1 Demo](https://codepen.io/artkabis/pen/mybMRLY)
+
 ## Browser Support
 - Chrome 61+
 - Firefox 63+
 - Safari 13.1+
 - Edge 79+
 
+## Documentation
+For detailed documentation and advanced examples, visit our [GitHub repository](https://github.com/yourusername/quarkfx).
+
 ## License
 MIT
 
-## Contributing
-Feel free to submit PRs or create issues on [GitHub](https://github.com/yourusername/quarkfx).
-
-See the [live demo](https://codepen.io/artkabis/pen/mybMRLY) for more examples.
+## Author
+Created by Gregory Nicolle (Artkabis)
