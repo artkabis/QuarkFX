@@ -282,7 +282,7 @@ quark.stagger('.grid-items', 1000,
 - Edge 79+
 
 ## Documentation
-For detailed documentation and advanced examples, visit our [GitHub repository](https://github.com/yourusername/quarkfx).
+For detailed documentation and advanced examples, visit our [GitHub repository](https://github.com/artkabis/quarkfx).
 
 ## License
 MIT
